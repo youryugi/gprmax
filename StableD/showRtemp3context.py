@@ -94,7 +94,7 @@ def denoise_add_noise(x, t, pred_noise, z=None):
     noise = b_t.sqrt()[t] * z
     mean = (x - pred_noise * ((1 - a_t[t]) / (1 - ab_t[t]).sqrt())) / a_t[t].sqrt()
     return mean + noise
-
+# helper function; removes the predicted noise (but adds some noise back in to avoid collapse)
 # sample using standard algorithm
 @torch.no_grad()
 def sample_ddpm(n_sample, save_rate=20):
@@ -119,6 +119,40 @@ def sample_ddpm(n_sample, save_rate=20):
 
     intermediate = np.stack(intermediate)
     return samples, intermediate
+# sample with context using standard algorithm
+@torch.no_grad()
+def sample_ddpm_context(n_sample, context, save_rate=20):
+    # x_T ~ N(0, 1), sample initial noise
+    samples = torch.randn(n_sample, 3, height, height).to(device)
+
+    # array to keep track of generated steps for plotting
+    intermediate = []
+    for i in range(timesteps, 0, -1):
+        print(f'sampling timestep {i:3d}', end='\r')
+
+        # reshape time tensor
+        t = torch.tensor([i / timesteps])[:, None, None, None].to(device)
+
+        # sample some random noise to inject back in. For i = 1, don't add back in noise
+        z = torch.randn_like(samples) if i > 1 else 0
+
+        eps = nn_model(samples, t, c=context)    # predict noise e_(x_t,t, ctx)
+        samples = denoise_add_noise(samples, i, eps, z)
+        if i % save_rate==0 or i==timesteps or i<8:
+            intermediate.append(samples.detach().cpu().numpy())
+
+    intermediate = np.stack(intermediate)
+    return samples, intermediate
+
+def show_images(imgs, nrow=2):
+    _, axs = plt.subplots(nrow, imgs.shape[0] // nrow, figsize=(4,2 ))
+    axs = axs.flatten()
+    for img, ax in zip(imgs, axs):
+        img = (img.permute(1, 2, 0).clip(-1, 1).detach().cpu().numpy() + 1) / 2
+        ax.set_xticks([])
+        ax.set_yticks([])
+        ax.imshow(img)
+    plt.show()
 
 if __name__ == "__main__":
     # hyperparameters
@@ -144,9 +178,11 @@ if __name__ == "__main__":
     ab_t = torch.cumsum(a_t.log(), dim=0).exp()
     ab_t[0] = 1
 
-    # construct model
+    # reset neural network
     nn_model = ContextUnet(in_channels=3, n_feat=n_feat, n_cfeat=n_cfeat, height=height).to(device)
 
+    # re setup optimizer
+    optim = torch.optim.Adam(nn_model.parameters(), lr=lrate)
     # load dataset and construct optimizer
     transform = transforms.Compose([
         transforms.ToTensor(),
@@ -160,54 +196,86 @@ if __name__ == "__main__":
     def perturb_input(x, t, noise):
         return ab_t.sqrt()[t, None, None, None] * x + (1 - ab_t[t, None, None, None]) * noise
 
-    # training without context code
+    # training with context code
+
+    # set into train mode
     nn_model.train()
+
     for ep in range(n_epoch):
         print(f'epoch {ep}')
+
+        # linearly decay learning rate
         optim.param_groups[0]['lr'] = lrate * (1 - ep / n_epoch)
 
         pbar = tqdm(dataloader, mininterval=2)
-        for x, _ in pbar:
+        for x, c in pbar:  # x: images  c: context
             optim.zero_grad()
             x = x.to(device)
+            c = c.to(x)
 
+            # randomly mask out c
+            context_mask = torch.bernoulli(torch.zeros(c.shape[0]) + 0.9).to(device)
+            c = c * context_mask.unsqueeze(-1)
+
+            # perturb data
             noise = torch.randn_like(x)
             t = torch.randint(1, timesteps + 1, (x.shape[0],)).to(device)
             x_pert = perturb_input(x, t, noise)
 
-            pred_noise = nn_model(x_pert, t / timesteps)
+            # use network to recover noise
+            pred_noise = nn_model(x_pert, t / timesteps, c=c)
 
+            # loss is mean squared error between the predicted and true noise
             loss = F.mse_loss(pred_noise, noise)
             loss.backward()
 
             optim.step()
 
+        # save model periodically
         if ep % 4 == 0 or ep == int(n_epoch - 1):
             if not os.path.exists(save_dir):
-                os.makedirs(save_dir, exist_ok=True)
-            torch.save(nn_model.state_dict(), save_dir + f"model_{ep}.pth")
-            print('saved model at ' + save_dir + f"model_{ep}.pth")
+                os.mkdir(save_dir)
+            torch.save(nn_model.state_dict(), save_dir + f"context_model_{ep}.pth")
+            print('saved model at ' + save_dir + f"context_model_{ep}.pth")
     # load in model weights and set to eval mode
-    for epoch in [0, 4, 8, 31]:  # 循环加载不同的模型权重
-        nn_model.load_state_dict(torch.load(f"{save_dir}/model_{epoch}.pth", map_location=device))
-        nn_model.eval()
-        print(f"Loaded Model {epoch}")
 
-        # visualize samples
-        plt.clf()
-        samples, intermediate_ddpm = sample_ddpm(32)
+    # load in pretrain model weights and set to eval mode
+    nn_model.load_state_dict(torch.load(f"{save_dir}/context_model_trained.pth", map_location=device))
+    nn_model.eval()
+    print("Loaded in Context Model")
 
-        # 保存动画为 GIF 文件
-        animation_file = f"{save_dir}/animation_model_{epoch}.gif"
-        animation_ddpm = plot_sample(intermediate_ddpm, 32, 4, save_dir, f"animation_model_{epoch}", None, save=True)
-        animation_ddpm.save(animation_file, writer=PillowWriter(fps=10))
-        print(f"Animation saved as {animation_file}")
+    # visualize samples with randomly selected context
+    plt.clf()
+    ctx = F.one_hot(torch.randint(0, 5, (32,)), 5).to(device=device).float()
+    samples, intermediate = sample_ddpm_context(32, ctx)
+    animation_ddpm_context = plot_sample(intermediate, 32, 4, save_dir, "ani_run", None, save=False)
+    HTML(animation_ddpm_context.to_jshtml())
 
-        # 可选择显示部分静态帧
-        fig, axes = plt.subplots(1, 4, figsize=(12, 3))
-        for i, ax in enumerate(axes):
-            if i < len(intermediate_ddpm):
-                ax.imshow(intermediate_ddpm[i][0].transpose(1, 2, 0))  # 显示第一张图片的中间状态
-                ax.axis("off")
-        plt.show()
+    # user defined context
+    ctx = torch.tensor([
+        # hero, non-hero, food, spell, side-facing
+        [1, 0, 0, 0, 0],
+        [1, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 1],
+        [0, 1, 0, 0, 0],
+        [0, 1, 0, 0, 0],
+        [0, 0, 1, 0, 0],
+        [0, 0, 1, 0, 0],
+    ]).float().to(device)
+    samples, _ = sample_ddpm_context(ctx.shape[0], ctx)
+    show_images(samples)
+
+    # mix of defined context
+    ctx = torch.tensor([
+        # hero, non-hero, food, spell, side-facing
+        [1, 0, 0, 0, 0],  # human
+        [1, 0, 0.6, 0, 0],
+        [0, 0, 0.6, 0.4, 0],
+        [1, 0, 0, 0, 1],
+        [1, 1, 0, 0, 0],
+        [1, 0, 0, 1, 0]
+    ]).float().to(device)
+    samples, _ = sample_ddpm_context(ctx.shape[0], ctx)
+    show_images(samples)
 
