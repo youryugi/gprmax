@@ -242,7 +242,7 @@ num_x = len(x_coords)  # 图像宽度
 num_y = len(y_coords)  # 图像高度
 
 # 每种布局，采集 num_samples 张“图像”
-num_samples = 30
+num_samples = 500
 
 # 最终结果列表
 X_list = []  # 存放 [480, num_y, num_x, 4]

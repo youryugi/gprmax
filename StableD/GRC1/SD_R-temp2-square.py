@@ -173,8 +173,8 @@ def save_samples_as_npy(samples, save_path):
     print(f"Saved samples to {save_path} with shape {samples_np.shape}")
 
 if __name__ == "__main__":
-    data_file=r".\generateRSSI_2025-01-23_21-25-38\X_data.npy"
-    label_file=r".\generateRSSI_2025-01-23_21-25-38\Y_data.npy"
+    data_file=r".\generateRSSI_2025-01-23_22-09-15\X_data.npy"
+    label_file=r".\generateRSSI_2025-01-23_22-09-15\Y_data.npy"
     dataset = CustomDataset(data_file,label_file, transform, null_context=False)
     data = np.load(data_file)
     labels = np.load(label_file)
@@ -197,7 +197,7 @@ if __name__ == "__main__":
 
     # training hyperparameters
     batch_size = 100
-    n_epoch = 32
+    n_epoch = 100
     lrate = 1e-3
 
     # construct DDPM noise schedule
@@ -259,7 +259,7 @@ if __name__ == "__main__":
             optim.step()
 
         # save model periodically
-        if ep % 4 == 0 or ep == int(n_epoch - 1):
+        if ep % 10 == 0 or ep == int(n_epoch - 1):
             if not os.path.exists(save_dir):
                 os.mkdir(save_dir)
             torch.save(nn_model.state_dict(), save_dir + f"context_model_{ep}.pth")
@@ -267,7 +267,7 @@ if __name__ == "__main__":
     # load in model weights and set to eval mode
 
     # load in pretrain model weights and set to eval mode
-    nn_model.load_state_dict(torch.load(f"{save_dir}/context_model_31.pth", map_location=device))
+    nn_model.load_state_dict(torch.load(f"{save_dir}/context_model_99.pth", map_location=device))
     nn_model.eval()
     print("Loaded in Context Model")
     # 在推理完成后调用保存函数
@@ -279,14 +279,14 @@ if __name__ == "__main__":
     # 示例：保存用户定义上下文生成的样本
     ctx = torch.tensor([
         # hero, non-hero, food, spell, side-facing
-        [1, 0, 0, 0],
-        [1, 0, 0, 0],
         [0, 0, 0, 0],
         [0, 0, 0, 0],
-        [0, 1, 0, 0],
-        [0, 1, 0, 0],
-        [0, 0, 1, 0],
-        [0, 0, 1, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
     ]).float().to(device)
     samples, _ = sample_ddpm_context(ctx.shape[0], ctx)
     save_samples_as_npy(samples, f"{save_dir}/user_defined_context_samples.npy")
