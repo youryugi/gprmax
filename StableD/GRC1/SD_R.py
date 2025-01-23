@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation, PillowWriter
 import numpy as np
 from IPython.display import HTML
-from diffusion_utilities import *
+from diffusion_utilities_R import *
 #无context的情况下
 class ContextUnet(nn.Module):
     def __init__(self, in_channels, n_feat=256, n_cfeat=10, height=28):  # cfeat - context features
@@ -199,12 +199,52 @@ if __name__ == "__main__":
     # training with context code
 
     # set into train mode
+    nn_model.train()
+
+    for ep in range(n_epoch):
+        print(f'epoch {ep}')
+
+        # linearly decay learning rate
+        optim.param_groups[0]['lr'] = lrate * (1 - ep / n_epoch)
+
+        pbar = tqdm(dataloader, mininterval=2)
+        for x, c in pbar:  # x: images  c: context
+            optim.zero_grad()
+            x = x.to(device)
+            c = c.to(x)
+
+            # randomly mask out c
+            context_mask = torch.bernoulli(torch.zeros(c.shape[0]) + 0.9).to(device)
+            c = c * context_mask.unsqueeze(-1)
+
+            # perturb data
+            noise = torch.randn_like(x)
+            t = torch.randint(1, timesteps + 1, (x.shape[0],)).to(device)
+            x_pert = perturb_input(x, t, noise)
+
+            # use network to recover noise
+            pred_noise = nn_model(x_pert, t / timesteps, c=c)
+
+            # loss is mean squared error between the predicted and true noise
+            loss = F.mse_loss(pred_noise, noise)
+            loss.backward()
+
+            optim.step()
+
+        # save model periodically
+        if ep % 4 == 0 or ep == int(n_epoch - 1):
+            if not os.path.exists(save_dir):
+                os.mkdir(save_dir)
+            torch.save(nn_model.state_dict(), save_dir + f"context_model_{ep}.pth")
+            print('saved model at ' + save_dir + f"context_model_{ep}.pth")
+    # load in model weights and set to eval mode
 
     # load in pretrain model weights and set to eval mode
     nn_model.load_state_dict(torch.load(f"{save_dir}/context_model_31.pth", map_location=device))
     nn_model.eval()
     print("Loaded in Context Model")
 
+    # visualize samples with randomly selected context
     # visualize samples with randomly selected context
     plt.clf()
     ctx = F.one_hot(torch.randint(0, 5, (32,)), 5).to(device=device).float()
@@ -246,7 +286,7 @@ if __name__ == "__main__":
         [0, 0, 0.6, 0.4, 0],
         [1, 0, 0, 0, 1],
         [1, 1, 0, 0, 0],
-        [1, 0, 1, 0, 0],
+        [1, 0, 0, 1, 0]
     ]).float().to(device)
     samples, _ = sample_ddpm_context(ctx.shape[0], ctx)
 
