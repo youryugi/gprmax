@@ -154,6 +154,23 @@ def show_images(imgs, nrow=2):
         ax.imshow(img)
     plt.show()
 
+# 在推理完成后保存输出为 .npy 文件
+def save_samples_as_npy(samples, save_path):
+    """
+    将推理结果保存为 [x, RSSI_height, RSSI_width, d_RSSI] 的 .npy 文件
+    :param samples: 推理结果，形状为 [x, d_RSSI, RSSI_height, RSSI_width]
+    :param save_path: 保存路径
+    """
+    # 将张量从 GPU 移动到 CPU，并转换为 NumPy 数组
+    samples_np = samples.detach().cpu().numpy()
+
+    # 调整形状为 [x, RSSI_height, RSSI_width, d_RSSI]
+    samples_np = np.transpose(samples_np, (0, 2, 3, 1))
+
+    # 保存为 .npy 文件
+    np.save(save_path, samples_np)
+    print(f"Saved samples to {save_path} with shape {samples_np.shape}")
+
 if __name__ == "__main__":
     dataset = CustomDataset(r"C:\Users\79152\Desktop\github\3rdtopic\StableD\GRC1\generateRSSI_2025-01-23_17-13-11\X_data.npy",
                             r"C:\Users\79152\Desktop\github\3rdtopic\StableD\GRC1\generateRSSI_2025-01-23_17-13-11\Y_data.npy",
@@ -252,25 +269,13 @@ if __name__ == "__main__":
     nn_model.load_state_dict(torch.load(f"{save_dir}/context_model_31.pth", map_location=device))
     nn_model.eval()
     print("Loaded in Context Model")
-
-    # visualize samples with randomly selected context
-    plt.clf()
+    # 在推理完成后调用保存函数
+    # 示例：保存随机上下文生成的样本
     ctx = F.one_hot(torch.randint(0, n_cfeat, (32,)), n_cfeat).to(device=device).float()
     samples, intermediate = sample_ddpm_context(32, ctx)
-    #32就是n_epoch
+    save_samples_as_npy(samples, f"{save_dir}/random_context_samples.npy")
 
-
-    # 保存动画为 GIF 文件
-    animation_file = f"{save_dir}/random_context_animation.gif"
-    animation_ddpm_context = plot_sample(intermediate, 32, 4, save_dir, "random_context_animation", None, save=True)
-    animation_ddpm_context.save(animation_file, writer=PillowWriter(fps=10))
-    print(f"Random context animation saved at {animation_file}")
-
-    # 可视化部分静态图片
-    print("Displaying random context sample images:")
-    show_images(samples)
-
-    # user-defined context
+    # 示例：保存用户定义上下文生成的样本
     ctx = torch.tensor([
         # hero, non-hero, food, spell, side-facing
         [1, 0, 0, 0],
@@ -283,12 +288,9 @@ if __name__ == "__main__":
         [0, 0, 1, 0],
     ]).float().to(device)
     samples, _ = sample_ddpm_context(ctx.shape[0], ctx)
+    save_samples_as_npy(samples, f"{save_dir}/user_defined_context_samples.npy")
 
-    # 显示静态图片
-    print("Displaying user-defined context sample images:")
-    show_images(samples)
-
-    # mix of defined context
+    # 示例：保存混合上下文生成的样本
     ctx = torch.tensor([
         # hero, non-hero, food, spell, side-facing
         [1, 0, 0, 0],  # human
@@ -299,9 +301,6 @@ if __name__ == "__main__":
         [1, 0, 0, 1]
     ]).float().to(device)
     samples, _ = sample_ddpm_context(ctx.shape[0], ctx)
-
-    # 显示静态图片
-    print("Displaying mixed context sample images:")
-    show_images(samples)
+    save_samples_as_npy(samples, f"{save_dir}/mixed_context_samples.npy")
 
 

@@ -11,7 +11,7 @@ from matplotlib.animation import FuncAnimation, PillowWriter
 import numpy as np
 from IPython.display import HTML
 from diffusion_utilities import *
-#无context的情况下
+#有context的情况下
 class ContextUnet(nn.Module):
     def __init__(self, in_channels, n_feat=256, n_cfeat=10, height=28):  # cfeat - context features
         super(ContextUnet, self).__init__()
