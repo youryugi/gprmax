@@ -229,8 +229,11 @@ def signal_strength(x, y, rx, ry, walls, path_loss=2, noise_level=2,
 # =============================
 
 # 构建 (x,y) 网格
-x_min, x_max = 1.5, 9.5
-y_min, y_max = 2, 12.5
+#x_min, x_max = 1.5, 9.5 #维度是17
+#y_min, y_max = 1.5, 9.5 #维度是17
+#y_min, y_max = 2, 12.5 #维度是22
+x_min, x_max = 1.5, 9 #维度是16
+y_min, y_max = 1.5, 9 #维度是16
 interval = 0.5
 
 x_coords = np.arange(x_min, x_max + interval, interval)  # 1.5,2.0,...,9.5

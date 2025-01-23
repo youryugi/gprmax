@@ -100,7 +100,7 @@ def denoise_add_noise(x, t, pred_noise, z=None):
 @torch.no_grad()
 def sample_ddpm(n_sample, save_rate=20):
     # x_T ~ N(0, 1), sample initial noise
-    samples = torch.randn(n_sample, d_RSSI, RSSI_height, RSSI_width).to(device)
+    samples = torch.randn(n_sample, d_RSSI, RSSI_height, RSSI_height).to(device)#因为是正方形，所以是两个height
 
     # array to keep track of generated steps for plotting
     intermediate = []
@@ -173,8 +173,8 @@ def save_samples_as_npy(samples, save_path):
     print(f"Saved samples to {save_path} with shape {samples_np.shape}")
 
 if __name__ == "__main__":
-    data_file=r".\generateRSSI_2025-01-23_17-13-11\X_data.npy"
-    label_file=r".\generateRSSI_2025-01-23_17-13-11\Y_data.npy"
+    data_file=r".\generateRSSI_2025-01-23_21-25-38\X_data.npy"
+    label_file=r".\generateRSSI_2025-01-23_21-25-38\Y_data.npy"
     dataset = CustomDataset(data_file,label_file, transform, null_context=False)
     data = np.load(data_file)
     labels = np.load(label_file)
@@ -207,7 +207,7 @@ if __name__ == "__main__":
     ab_t[0] = 1
 
     # reset neural network
-    nn_model = ContextUnet(in_channels=d_RSSI, n_feat=n_feat, n_cfeat=n_cfeat, height=RSSI_height, width=RSSI_width).to(device)
+    nn_model = ContextUnet(in_channels=d_RSSI, n_feat=n_feat, n_cfeat=n_cfeat, height=RSSI_height).to(device)
 
     # re setup optimizer
     optim = torch.optim.Adam(nn_model.parameters(), lr=lrate)
