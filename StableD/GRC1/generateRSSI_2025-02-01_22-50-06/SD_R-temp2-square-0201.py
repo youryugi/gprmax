@@ -89,11 +89,6 @@ class ContextUnet(nn.Module):
         out = self.out(torch.cat((up3, x), 1))
         return out
 
-# def normalize_rssi(data):
-#     return (data + 100) / 80  # 归一化到 [0, 1]，因为 -100 ~ -20
-#
-# def denormalize_rssi(data):
-#     return data * 80 - 100  # 反归一化回 RSSI 真实值
 def normalize_rssi(data):
     return (data + 60) / 40  # 归一化到 [-1,1]
 
@@ -194,8 +189,8 @@ def save_samples_as_npy(samples, save_path):
     print(f"Saved samples to {save_path} with shape {samples_np.shape}")
 
 if __name__ == "__main__":
-    data_file=r".\generateRSSI_2025-01-23_22-09-15\X_data.npy"
-    label_file=r".\generateRSSI_2025-01-23_22-09-15\Y_data.npy"
+    data_file=r".\X_data.npy"
+    label_file=r".\Y_data.npy"
     dataset = CustomDataset(data_file,label_file, transform, null_context=False)
     data = np.load(data_file)
     labels = np.load(label_file)

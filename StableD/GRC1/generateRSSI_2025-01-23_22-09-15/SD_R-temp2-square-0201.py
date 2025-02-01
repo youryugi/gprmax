@@ -194,8 +194,8 @@ def save_samples_as_npy(samples, save_path):
     print(f"Saved samples to {save_path} with shape {samples_np.shape}")
 
 if __name__ == "__main__":
-    data_file=r".\generateRSSI_2025-01-23_22-09-15\X_data.npy"
-    label_file=r".\generateRSSI_2025-01-23_22-09-15\Y_data.npy"
+    data_file=r".\X_data.npy"
+    label_file=r".\Y_data.npy"
     dataset = CustomDataset(data_file,label_file, transform, null_context=False)
     data = np.load(data_file)
     labels = np.load(label_file)
