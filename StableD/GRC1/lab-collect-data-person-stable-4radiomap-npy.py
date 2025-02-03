@@ -13,6 +13,7 @@ space_size_x = 10.35
 space_size_y = 14.8
 
 # 四个路由器坐标 (AP)
+#todo 路由器1是左下  2是左上  3是右下 4是右上 对应4个通道
 routers = [
     (1, 1),
     (1, space_size_y - 1),
@@ -260,8 +261,8 @@ for layout_idx, walls in enumerate(walls_layouts):
     for sample_idx in range(num_samples):
         # 构建一张“图像”，大小 [num_y, num_x, 4]
         image_rssi = np.zeros((num_y, num_x, 4), dtype=np.float32)
-
-        # 遍历网格点 (先行后列 => (iy, ix) => (y, x))
+        #todo
+        # 遍历网格点 (先行后列 => (iy, ix) => (y, x)) 从左往右 从下往上
         for iy, vy in enumerate(y_coords):
             for ix, vx in enumerate(x_coords):
                 # 4 个 AP 分别计算 RSSI
