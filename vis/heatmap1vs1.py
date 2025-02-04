@@ -2,8 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # 加载数据
-file1 = r"C:\Users\79152\Desktop\3rdtopic\StableD\GRC1\generateRSSI_2025-02-01_22-50-06\mean_chanel1_mean_X_data.npy"  # 你的基准文件
-file2 = r"C:\Users\79152\Desktop\3rdtopic\StableD\GRC1\generateRSSI_2025-02-01_22-50-06\weights\mean_chanel1_user_defined_context_samples.npy"  # 另一个文件
+file1 = r"C:\Users\79152\Desktop\3rdtopic\StableD\GRC1\generateRSSI_500\mean_chanel1_mean_X_data.npy"  # 你的基准文件
+file2 = r"C:\Users\79152\Desktop\3rdtopic\StableD\GRC1\generateRSSI_500\weights\mean_chanel1_user_defined_context_samples.npy"  # 另一个文件
 
 # 读取数据
 data1 = np.load(file1)  # 形状应为 (16, 16, 1)
@@ -29,12 +29,12 @@ fig, axes = plt.subplots(1, 3, figsize=(15, 5))
 
 # 可视化 data1，设置相同的 vmin 和 vmax
 im1 = axes[0].imshow(data1, cmap="viridis", interpolation="nearest", vmin=vmin, vmax=vmax)
-axes[0].set_title("Data1 Heatmap")
+axes[0].set_title("[0,0,0,0] Heatmap\n simulated data (ground truth)")
 fig.colorbar(im1, ax=axes[0])
 
 # 可视化 data2，设置相同的 vmin 和 vmax
 im2 = axes[1].imshow(data2, cmap="viridis", interpolation="nearest", vmin=vmin, vmax=vmax)
-axes[1].set_title("Data2 Heatmap")
+axes[1].set_title("[0,0,0,0] Heatmap- generated data")
 fig.colorbar(im2, ax=axes[1])
 
 # 可视化差值图
@@ -43,5 +43,5 @@ axes[2].set_title("Difference Heatmap")
 fig.colorbar(im3, ax=axes[2])
 
 # 设置整体标题
-plt.suptitle("Visualization of Data1, Data2, and Their Differences")
+plt.suptitle("Visualization of ground truth, generated data, and their differences")
 plt.show()

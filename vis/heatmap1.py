@@ -1,0 +1,26 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# 加载数据
+file1 = r"C:\Users\79152\Desktop\3rdtopic\StableD\GRC1\generateRSSI_8000\X_data.npy"  # 你的基准文件
+
+# 读取数据
+data1 = np.load(file1)  # 形状应为 (16, 16, 1)
+data1=data1[1200]
+data1=data1[:,:,1]
+print(data1.shape)
+
+
+assert data1.shape == (16, 16), f"数据1形状不匹配: {data1.shape}"
+
+# 创建 3 个子图
+fig, ax = plt.subplots(figsize=(5, 5))
+
+# 绘制 heatmap
+im = ax.imshow(data1, cmap="viridis", interpolation="nearest")
+ax.set_title("[0,0,1,0] Heatmap")
+
+
+# 设置整体标题
+#plt.suptitle("Visualization of Data1, Data2, and Their Differences")
+plt.show()
