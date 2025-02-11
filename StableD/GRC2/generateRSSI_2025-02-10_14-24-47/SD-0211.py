@@ -239,7 +239,7 @@ if __name__ == "__main__":
     device = torch.device("cuda:0" if torch.cuda.is_available() else torch.device('cpu'))
     n_feat = 64
     n_cfeat = labels.shape[1]  # 4
-    save_dir = './weights/'
+    save_dir = './weights0211/'
 
     batch_size = 100
     n_epoch = 100
