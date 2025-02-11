@@ -195,7 +195,7 @@ if __name__ == "__main__":
     # 自定义的 transform，用于将数据范围 [-60, -20] 大致映射到 [-1, 1]
     transform = transforms.Compose([
         transforms.ToTensor(),
-        transforms.Lambda(lambda x: normalize_rssi(x*1.0))  # x转浮点防止意外
+        transforms.Normalize((-60,), (40,))  # 让 RSSI (-100, -20) → [-1, 1]
     ])
 
     # 构造数据集
