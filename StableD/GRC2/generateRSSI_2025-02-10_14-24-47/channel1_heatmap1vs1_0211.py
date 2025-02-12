@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 # 加载数据
 file1 = r"C:\Users\79152\Desktop\3rdtopic\StableD\GRC2\generateRSSI_2025-02-10_14-24-47\averaged_rssi_per_label\mean_1_1_1_1.npy"
-file2 = r"C:\Users\79152\Desktop\3rdtopic\StableD\GRC2\generateRSSI_2025-02-10_14-24-47\weights\trained_contexts\mean_context_1_1_1_0_samples.npy"
+file2 = r"C:\Users\79152\Desktop\3rdtopic\StableD\GRC2\generateRSSI_2025-02-10_14-24-47\weights\untrained_contexts\mean_context_1_1_1_1_samples.npy"
 
 # 读取数据
 data1 = np.load(file1)  # 形状 (1, 28, 28, 4)
@@ -32,17 +32,17 @@ fig, axes = plt.subplots(1, 3, figsize=(15, 5))
 
 # 可视化 data1
 im1 = axes[0].imshow(data1, cmap="viridis", interpolation="nearest", vmin=vmin, vmax=vmax)
-axes[0].set_title(f"Heatmap of Ground Truth (channel {channel_index})")
+axes[0].set_title(f"Heatmap of Ground Truth (router {channel_index+1})")
 fig.colorbar(im1, ax=axes[0])
 
 # 可视化 data2
 im2 = axes[1].imshow(data2, cmap="viridis", interpolation="nearest", vmin=vmin, vmax=vmax)
-axes[1].set_title(f"Heatmap of Generated Data (channel {channel_index})")
+axes[1].set_title(f"Heatmap of Generated Data (router {channel_index+1})")
 fig.colorbar(im2, ax=axes[1])
 
 # 可视化差值
 im3 = axes[2].imshow(diff, cmap="coolwarm", interpolation="nearest")
-axes[2].set_title(f"Difference Heatmap (channel {channel_index})")
+axes[2].set_title(f"Difference Heatmap (router {channel_index+1})")
 fig.colorbar(im3, ax=axes[2])
 
 # 设置整体标题
