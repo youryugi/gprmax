@@ -2,9 +2,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # 加载数据
-file1 = r"C:\Users\79152\Desktop\3rdtopic\StableD\GRC2\generateRSSI_2025-02-10_14-24-47\averaged_rssi_per_label\mean_1_1_1_1.npy"
-file2 = r"C:\Users\79152\Desktop\3rdtopic\StableD\GRC2\generateRSSI_2025-02-10_14-24-47\weights\untrained_contexts\mean_context_1_1_1_1_samples.npy"
-
+file1 = r"C:\Users\79152\Desktop\3rdtopic\StableD\GRC2\generateRSSI_2025-02-13_12-51-49\averaged_rssi_per_label\mean_0_0_0_0.npy"
+file2 = r"C:\Users\79152\Desktop\3rdtopic\StableD\GRC2\generateRSSI_2025-02-13_12-51-49\weights_16_experiments\excluded_0_0_0_0\untrained\context_0_0_0_0\samples.npy"
+#1是真实数据  2是推测数据
 # 读取数据
 data1 = np.load(file1)  # 形状 (1, 28, 28, 4)
 data2 = np.load(file2)  # 形状 (1, 28, 28, 4)
