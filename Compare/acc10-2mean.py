@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 # 加载数据
 file1 = r"C:\Users\79152\Desktop\3rdtopic\StableD\GRC2\generateRSSI_2025-02-13_12-51-49\averaged_rssi_per_label\mean_0_0_0_0.npy"
-file2 = r"C:\Users\79152\Desktop\3rdtopic\StableD\GRC2\generateRSSI_2025-02-13_12-51-49\weights_16_experiments\excluded_0_0_0_0\untrained\context_0_0_0_0\samples.npy"
+file2 = r"C:\Users\79152\Desktop\3rdtopic\StableD\GRC2\generateRSSI_2025-02-13_12-51-49\weights_16_experiments\excluded_0_1_0_0\untrained\context_0_1_0_0\samples.npy"
 
 # 读取数据
 data1 = np.load(file1)  # 形状 (1, 28, 28, 4)
@@ -16,7 +16,7 @@ assert data1.shape == (1, 28, 28, 4), f"数据1形状不匹配: {data1.shape}"
 assert data2.shape == (1, 28, 28, 4), f"数据2形状不匹配: {data2.shape}"
 
 # 选择通道进行可视化
-channel_index = 3  # 可以改成 1, 2, 3 选择不同通道
+channel_index = 1  # 可以改成 1, 2, 3 选择不同通道
 
 # 取出对应通道的数据
 data1 = data1[0, :, :, channel_index]  # (28, 28)
