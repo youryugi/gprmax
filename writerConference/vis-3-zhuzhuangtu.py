@@ -22,7 +22,15 @@ file_names = df_5["File Name"]
 accuracy_5 = df_5["Accuracy Ratio"]
 accuracy_10 = df_10["Accuracy Ratio"]
 accuracy_15 = df_15["Accuracy Ratio"]
+# 计算平均值
+mean_accuracy_5 = df_5["Accuracy Ratio"].mean()
+mean_accuracy_10 = df_10["Accuracy Ratio"].mean()
+mean_accuracy_15 = df_15["Accuracy Ratio"].mean()
 
+# 打印结果
+print(f"ETR 5% 平均准确率: {mean_accuracy_5:.4f}")
+print(f"ETR 10% 平均准确率: {mean_accuracy_10:.4f}")
+print(f"ETR 15% 平均准确率: {mean_accuracy_15:.4f}")
 # 画柱状图，调整图形尺寸
 plt.figure(figsize=(13, 4))  # 宽 14，高 5，确保图形长扁
 
