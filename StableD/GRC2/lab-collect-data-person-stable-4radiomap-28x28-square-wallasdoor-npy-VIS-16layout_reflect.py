@@ -309,7 +309,7 @@ def main():
     num_y = len(y_coords)
 
     # 每种布局，采集 num_samples 组“RSSI图”
-    num_samples = 5
+    num_samples = 500
 
     X_list = []
     Y_list = []
