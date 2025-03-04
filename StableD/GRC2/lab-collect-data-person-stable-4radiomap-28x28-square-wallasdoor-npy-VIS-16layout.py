@@ -45,8 +45,8 @@ for i in range(16):  # 0000 ~ 1111 共 16 种
     bits.reverse()  # 让最左边是最高位
     layout_labels_4bits.append(bits)
 
-    # 生成该状态下的墙壁（如果 bit == 0 代表墙存在）
-    walls = [walls_base[j] for j in range(4) if bits[j] == 0]
+    # 生成该状态下的墙壁（如果 bit == 1代表墙存在）
+    walls = [walls_base[j] for j in range(4) if bits[j] == 1]
     walls_layouts.append(walls)
 
 layout_labels_4bits = np.array(layout_labels_4bits)
