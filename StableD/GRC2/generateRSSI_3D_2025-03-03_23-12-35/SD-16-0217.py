@@ -182,6 +182,12 @@ def save_samples_as_npy(samples, save_path):
 
 
 if __name__ == "__main__":
+    print("PyTorch can see GPUs:", torch.cuda.device_count())  # 多少个 GPU
+    for i in range(torch.cuda.device_count()):
+        print(f"GPU {i}: {torch.cuda.get_device_name(i)}")
+
+    print("Current selected GPU:", torch.cuda.current_device())  # PyTorch 选择的 GPU
+
     # =====================
     #     1. 加载数据
     # =====================
@@ -215,7 +221,7 @@ if __name__ == "__main__":
     #终止噪声系数，即扩散过程的最大噪声方差，默认为beta2 = 0.05
     beta2 = 0.02 #论文是0.02
 
-    device = torch.device("cuda:0" if torch.cuda.is_available() else torch.device('cpu'))
+    device = torch.device("cuda:1" if torch.cuda.is_available() else torch.device('cpu'))
     n_feat = 64           # U-Net中间通道数
     n_cfeat = labels.shape[1]  # context维度 (这里是4)
     batch_size = 100
