@@ -51,7 +51,7 @@ custom_xticks = [
     "[1,0,0,0]", "[1,0,0,1]", "[1,0,1,0]", "[1,0,1,1]",
     "[1,1,0,0]", "[1,1,0,1]", "[1,1,1,0]", "[1,1,1,1]"
 ]  # 你可以修改这部分来定义自己的横坐标
-
+custom_xticks.reverse()
 # 设置横坐标
 plt.xticks([i + bar_width for i in x], custom_xticks, rotation=30,fontsize=14)  # 旋转角度 0，确保横坐标水平
 plt.yticks(fontsize=14)  # 将纵坐标字体大小调整为14

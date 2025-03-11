@@ -13,10 +13,10 @@ routers = [
 ]
 
 walls_base = [
-    [(space_size_x / 2, 0), (space_size_x / 2, space_size_y / 2)],
-    [(space_size_x / 2, space_size_y / 2), (space_size_x / 2, space_size_y)],
-    [(0, space_size_y / 2), (space_size_x / 2, space_size_y / 2)],
-    [(space_size_x / 2, space_size_y / 2), (space_size_x, space_size_y / 2)],
+    [(0, space_size_y / 2), (space_size_x / 2, space_size_y / 2)],#左
+    [(space_size_x / 2, space_size_y / 2), (space_size_x / 2, space_size_y)],  # 上
+    [(space_size_x / 2, space_size_y / 2), (space_size_x, space_size_y / 2)],#右
+    [(space_size_x / 2, 0), (space_size_x / 2, space_size_y / 2)],  # 下
 ]
 
 walls_layouts = []
@@ -26,7 +26,7 @@ for i in range(16):
     bits = [(i >> b) & 1 for b in range(4)]
     bits.reverse()
     layout_labels_4bits.append(bits)
-    walls = [walls_base[j] for j in range(4) if bits[j] == 0]
+    walls = [walls_base[j] for j in range(4) if bits[j] == 1]
     walls_layouts.append(walls)
 
 layout_labels_4bits = np.array(layout_labels_4bits)
@@ -34,7 +34,7 @@ layout_labels_4bits = np.array(layout_labels_4bits)
 selected_layouts = [
     [0, 0, 0, 0],
     [1, 1, 0, 0],
-    [0, 1, 1, 1],
+    [0, 1, 0, 1],
     [1, 1, 1, 1]
 ]
 
