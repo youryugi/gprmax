@@ -14,24 +14,26 @@ routers = [
     (space_size_x - 1, space_size_y - 1)
 ]
 
-# 4扇“门”(如 [0,0,0,0] 全关，0=有墙,1=开门)
+# 四个门（墙）的位置
 walls_base = [
-    [(space_size_x / 2, 0), (space_size_x / 2, space_size_y / 2)],
-    [(space_size_x / 2, space_size_y / 2), (space_size_x / 2, space_size_y)],
-    [(0, space_size_y / 2), (space_size_x / 2, space_size_y / 2)],
-    [(space_size_x / 2, space_size_y / 2), (space_size_x, space_size_y / 2)],
+    [(space_size_x / 2, 0), (space_size_x / 2, space_size_y / 2)],  # 门1（左下）
+    [(space_size_x / 2, space_size_y / 2), (space_size_x / 2, space_size_y)],  # 门2（左上）
+    [(0, space_size_y / 2), (space_size_x / 2, space_size_y / 2)],  # 门3（右上）
+    [(space_size_x / 2, space_size_y / 2), (space_size_x, space_size_y / 2)],  # 门4（右下）
 ]
+
 
 # 生成16种 layout
 walls_layouts = []
 layout_labels_4bits = []
 
-for i in range(16):
-    bits = [(i >> b) & 1 for b in range(4)]
-    bits.reverse()
+for i in range(16):  # 0000 ~ 1111 共 16 种
+    bits = [(i >> b) & 1 for b in range(4)]  # 解析成二进制列表
+    bits.reverse()  # 让最左边是最高位
     layout_labels_4bits.append(bits)
-    # bit=0 => 有墙, bit=1 => 没墙(门开)
-    walls = [walls_base[j] for j in range(4) if bits[j] == 0]
+
+    # 生成该状态下的墙壁（如果 bit == 1代表墙存在）
+    walls = [walls_base[j] for j in range(4) if bits[j] == 1]
     walls_layouts.append(walls)
 
 layout_labels_4bits = np.array(layout_labels_4bits)
@@ -46,17 +48,19 @@ def extract_layout_from_filename(filename):
     若没有匹配则返回 None.
     """
     match = re.search(r'(\d)_(\d)_(\d)_(\d)', filename)
+    print("match=",match)
     if match:
         return [int(match.group(1)), int(match.group(2)),
                 int(match.group(3)), int(match.group(4))]
+
     return None
 
 
 # =========== 3. 指定文件 & 解析布局 ===========
 
 # 示例文件，可换成你自己的路径
-file1 = r"C:\Users\79152\Desktop\3rdtopic\StableD\GRC2\generateRSSI_2025-02-13_12-51-49\averaged_rssi_per_label\mean_0_0_0_0.npy"
-file2 = r"C:\Users\79152\Desktop\3rdtopic\StableD\GRC2\generateRSSI_2025-02-13_12-51-49\weights_16_experiments\excluded_0_0_0_0\untrained\context_0_0_0_0\samples.npy"
+file1 = r"C:\Users\79152\Desktop\3rdtopic\StableD\GRC2\generateRSSI_2025-04-15_16-12-30\averaged_rssi_per_label\mean_0_1_0_1.npy"
+file2 = r"C:\Users\79152\Desktop\3rdtopic\StableD\GRC2\generateRSSI_2025-04-15_16-12-30\weights_16_experiments\excluded_0_1_0_1\untrained\context_0_1_0_1\samples.npy"
 
 layout_from_file = extract_layout_from_filename(file1)
 if layout_from_file is None:
