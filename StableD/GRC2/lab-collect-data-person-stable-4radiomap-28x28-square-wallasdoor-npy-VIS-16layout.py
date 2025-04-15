@@ -22,11 +22,7 @@ routers = [
 ]
 
 # 穿墙损耗与人体损耗
-wall_loss = 15   # (dB)
-person_loss = 6  # (dB)
-
-# 定义人的影响范围（半径）
-person_effect_radius = 0.3
+wall_loss = 10   # (dB)
 
 # 四个门（墙）的位置
 walls_base = [
@@ -59,25 +55,6 @@ def lines_intersect(x1, y1, x2, y2, x3, y3, x4, y4):
             ccw(x1, y1, x2, y2, x3, y3) != ccw(x1, y1, x2, y2, x4, y4))
 
 # 线段-圆相交判断 (未实际用到，但先保留)
-def line_circle_intersect(x1, y1, x2, y2, cx, cy, radius):
-    dx = x2 - x1
-    dy = y2 - y1
-    fx = x1 - cx
-    fy = y1 - cy
-
-    a = dx**2 + dy**2
-    b = 2 * (fx * dx + fy * dy)
-    c = fx**2 + fy**2 - radius**2
-    discriminant = b**2 - 4*a*c
-
-    if discriminant >= 0:
-        discriminant = np.sqrt(discriminant)
-        t1 = (-b - discriminant) / (2*a)
-        t2 = (-b + discriminant) / (2*a)
-        if (0 <= t1 <= 1) or (0 <= t2 <= 1):
-            return True
-    return False
-
 # 计算穿墙次数
 def walls_crossed(x, y, rx, ry, walls):
     crossed = 0
@@ -89,7 +66,7 @@ def walls_crossed(x, y, rx, ry, walls):
     return crossed
 
 # RSSI 计算
-def signal_strength(x, y, rx, ry, walls, path_loss=2, noise_level=2):
+def signal_strength(x, y, rx, ry, walls, path_loss=4, noise_level=2):
     distance = np.sqrt((x - rx)**2 + (y - ry)**2)
     if distance == 0:
         distance = 0.1  # 防止 log(0) 问题
