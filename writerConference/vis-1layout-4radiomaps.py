@@ -1,5 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
+bigfont=15
+plt.rcParams.update({'font.size': bigfont})  # 全局字体设定
 
 # =========== 参数设置与辅助函数 ===========
 np.random.seed(42)  # 设置随机种子，保证可重复
@@ -169,7 +171,7 @@ rx_coords = [r[0] for r in routers]
 ry_coords = [r[1] for r in routers]
 
 # 路由器
-ax0.scatter(rx_coords, ry_coords, color='blue', label='APs', s=100)
+ax0.scatter(rx_coords, ry_coords, color='blue', label='APs', s=60)
 # 参考点
 ref_x = [p[0] for p in reference_points]
 ref_y = [p[1] for p in reference_points]
@@ -216,7 +218,7 @@ for i in range(len(routers)):
 
     # 只在当前 Radio Map 上散点出对应的路由器位置
     rx, ry = routers[i]  # 当前 router 的坐标
-    ax.scatter(rx, ry, color='blue',  s=100, marker='o')
+    ax.scatter(rx, ry, color='blue',  s=60, marker='o')
 
     ax.set_xlim(0, space_size_x)
     ax.set_ylim(0, space_size_y)
@@ -231,7 +233,15 @@ for i in range(len(routers)):
     ax.set_xlabel('')
     ax.set_ylabel('')
 # 调整图例，使其为一行
-ax0.legend(loc='upper center', ncol=2, columnspacing=0.1,handletextpad=0.1)  # 调整列间距
+ax0.legend(loc='upper center',
+           ncol=2,
+           columnspacing=0.01,   # 列间距更小
+           handletextpad=0.01,   # 图标和字更近
+           handlelength=1,      # 图标长度缩短
+           borderaxespad=0.2,   # legend和图的距离
+           borderpad=0.2,       # legend内部padding
+           labelspacing=0.1,    # 每行的间距
+           fontsize=bigfont)    # 字体大小
 
 # 只在最后一个 Radio Map 子图放颜色条
 # 也可在这一行 4 个 subplot 右侧放一个统一 colorbar

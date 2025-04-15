@@ -24,7 +24,7 @@ images = [image_rgb, red_channel, green_channel, blue_channel]
 
 for ax, img, title in zip(axes, images, titles):
     ax.imshow(img)
-    ax.set_title(title, fontsize=14)
+    ax.set_title(title, fontsize=20)
     ax.axis("off")
 
 # 调整子图间距，减少空白
