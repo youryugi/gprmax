@@ -308,7 +308,6 @@ if __name__ == "__main__":
         # multi_model.eval()
         # final_model_path = os.path.join(exp_dir, f"context_model_{n_epoch - 1}.pth")
         # multi_model.load_state_dict(torch.load(final_model_path, map_location=device))
-        #
         # print(f"   Loaded final model for testing (excluded={excluded_combo})")
 
         # 遍历所有16种标签进行采样
