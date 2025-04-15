@@ -11,7 +11,8 @@ np.random.seed(42)
 # 定义空间大小 (米)
 space_size_x = 16.5
 space_size_y = 16.5
-
+# 每种布局，采集 num_samples 张“图像”
+num_samples = 300
 # 四个路由器坐标 (AP)
 # 1是左下, 2是左上, 3是右下, 4是右上
 routers = [
@@ -54,7 +55,6 @@ def lines_intersect(x1, y1, x2, y2, x3, y3, x4, y4):
     return (ccw(x1, y1, x3, y3, x4, y4) != ccw(x2, y2, x3, y3, x4, y4) and
             ccw(x1, y1, x2, y2, x3, y3) != ccw(x1, y1, x2, y2, x4, y4))
 
-# 线段-圆相交判断 (未实际用到，但先保留)
 # 计算穿墙次数
 def walls_crossed(x, y, rx, ry, walls):
     crossed = 0
@@ -86,8 +86,7 @@ x_coords = np.arange(x_min, x_max + interval, interval)
 y_coords = np.arange(y_min, y_max + interval, interval)
 num_x = len(x_coords)
 num_y = len(y_coords)
-# 每种布局，采集 num_samples 张“图像”
-num_samples = 50
+
 
 # 存储数据
 X_list = []
