@@ -1,7 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import re
+import pandas as pd
 fontsizebig=20
+
+#zhiqi之前的数据的1111的标记是反过来的
 # =========== 1. 预定义布局参数 ===========
 
 space_size_x = 16.5
@@ -59,8 +62,8 @@ def extract_layout_from_filename(filename):
 # =========== 3. 指定文件 & 解析布局 ===========
 
 # 示例文件，可换成你自己的路径
-file1 = r"C:\Users\79152\Desktop\3rdtopic\StableD\GRC2\generateRSSI_2025-04-15_16-12-30\averaged_rssi_per_label\mean_0_1_0_1.npy"
-file2 = r"C:\Users\79152\Desktop\3rdtopic\StableD\GRC2\generateRSSI_2025-04-15_16-12-30\weights_16_experiments\excluded_0_1_0_1\untrained\context_0_1_0_1\samples.npy"
+file1 = r"C:\Users\79152\Desktop\3rdtopic\writerConference\data1111\0213_good_mean_0_0_0_1.npy"
+file2 = r"C:\Users\79152\Desktop\3rdtopic\writerConference\data1111\0213_good_result_0_0_0_1.npy"
 
 layout_from_file = extract_layout_from_filename(file1)
 if layout_from_file is None:
@@ -91,8 +94,20 @@ if data1.shape != (1, 28, 28, 4) or data2.shape != (1, 28, 28, 4):
 
 channel_index = 0  # 选择第4个路由器通道 (0-based)
 gt_rssi = data1[0, :, :, channel_index]  # (28,28)
+print("data1",gt_rssi)
 gen_rssi = data2[0, :, :, channel_index]
+print("data2",gen_rssi)
 
+# 创建 DataFrame
+df_gt = pd.DataFrame(gt_rssi)
+df_gen = pd.DataFrame(gen_rssi)
+
+# 保存为 Excel 文件
+with pd.ExcelWriter('rssi_output.xlsx', engine='openpyxl') as writer:
+    df_gt.to_excel(writer, sheet_name='GT_RSSI', index=False, header=False)
+    df_gen.to_excel(writer, sheet_name='Gen_RSSI', index=False, header=False)
+
+print("保存成功：rssi_output.xlsx")
 # 计算误差（百分比）
 error_pct = np.abs(gt_rssi - gen_rssi) / (np.abs(gt_rssi) + 1e-6) * 100
 accuracy_map = (error_pct <= 10).astype(float)  # True=1,False=0
@@ -118,19 +133,26 @@ titles = [
 cmap_list = ["viridis", "viridis", "gray"]
 data_list = [gt_rssi, gen_rssi, accuracy_map]
 
-# 统一 RSSI 色阶（前两张图）
-vmin, vmax = min(gt_rssi.min(), gen_rssi.min()), max(gt_rssi.max(), gen_rssi.max())
+# 统一 RSSI 色阶（前两张图）不再需要了
+#vmin, vmax = min(gt_rssi.min(), gen_rssi.min()), max(gt_rssi.max(), gen_rssi.max())
 
 for i, ax in enumerate(axes):
     data_show = data_list[i]
 
     # 对 accuracy map 特殊处理
+    import matplotlib.colors as colors  # 确保在开头已导入
+
+    # 设置不等距的颜色区间
+    boundaries = [-70,-69,-68,-67,-66,-65,-64,-63,-62,-60,-58,-56,-54,-52,-50,-48,-46, -44,-42,-40,-38,-36,-34,-32,-30]
+    norm = colors.BoundaryNorm(boundaries=boundaries, ncolors=256)
+
     if i < 2:
         im = ax.imshow(data_show,
                        cmap=cmap_list[i],
                        interpolation="nearest",
                        extent=extent,
-                       vmin=vmin, vmax=vmax)
+                       norm=norm)  # 注意这里使用 norm 替代 vmin/vmax
+
     else:
         # accuracy_map: 0=黑,1=白
         im = ax.imshow(data_show,
@@ -157,7 +179,7 @@ for i, ax in enumerate(axes):
     ax.set_ylabel("Y (m)", fontsize=fontsizebig)
     ax.set_aspect('equal', adjustable='box')
     ax.set_title(titles[i], fontsize=fontsizebig)
-    ax.grid(True)
+    ax.grid(False)
 
     # 每个子图独立 colorbar，但 Accuracy Map 不需要
     if i < 3:  # 仅对前两个子图添加 colorbar
