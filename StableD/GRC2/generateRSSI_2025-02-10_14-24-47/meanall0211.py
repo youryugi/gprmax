@@ -6,7 +6,8 @@ import os
 data_file = "X_data.npy"  # RSSI 数据
 label_file = "Y_data.npy"  # 标签数据
 
-data = np.load(data_file)  # Shape: (8000, 28, 28, 4)
+data = np.load(data_file)
+print(data.shape)# Shape: (8000, 28, 28, 4)
 labels = np.load(label_file)  # Shape: (8000, 4)
 
 # 计算所有唯一的标签组合
