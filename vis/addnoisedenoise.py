@@ -7,7 +7,7 @@ output_dir = "noised_images"
 os.makedirs(output_dir, exist_ok=True)
 
 # 读取原始图片（将图片转换为浮点类型）
-image_path = r"C:\Users\79152\Pictures\3nd\cat.jpg"  # 替换为你的图片路径
+image_path = r"C:\Users\79152\Downloads\pixelcat.jpg"  # 替换为你的图片路径
 image = cv2.imread(image_path, cv2.IMREAD_COLOR)
 image = image.astype(np.float32) / 255.0  # 归一化到 [0, 1]
 
