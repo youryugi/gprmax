@@ -17,7 +17,7 @@ normalized_data = (data - data_min) / (data_max - data_min)
 total_steps = 100
 alpha_values = np.linspace(0.99, 0.001, total_steps)
 beta_values = 1 - alpha_values
-save_indices = [0, total_steps // 3, (2 * total_steps) // 3, total_steps - 1]  # 四个关键步骤
+save_indices = [0, 1, (2 * total_steps) // 3, total_steps - 1]  # 四个关键步骤
 
 # ========== 4. 创建保存文件夹 ==========
 output_dir = "noised_heatmaps_with_noise"
@@ -26,33 +26,41 @@ os.makedirs(output_dir, exist_ok=True)
 # ========== 5. 添加噪声、绘制 RSSI 和 噪声图 ==========
 fig, axes = plt.subplots(2, 4, figsize=(16, 8))  # 两行：上 RSSI 下 噪声
 
+# 保存干净的单张 500x500 像素图（每张图单独一个 figure）
 for i, step in enumerate(save_indices):
     alpha_t = alpha_values[step]
     beta_t = beta_values[step]
 
-    # 加入噪声
     noise = np.random.normal(loc=0, scale=1.0, size=normalized_data.shape)
     noisy_data = np.sqrt(alpha_t) * normalized_data + np.sqrt(beta_t) * noise
 
-    # 上排：带噪 RSSI 热图
-    im1 = axes[0, i].imshow(noisy_data, cmap="viridis", interpolation="nearest")
-    axes[0, i].set_title(f"Noisy RSSI\nStep {step}, α={alpha_t:.3f}")
-    axes[0, i].axis('off')
-
-    # 下排：噪声图（直接可视化 ε）
-    im2 = axes[1, i].imshow(noise, cmap="bwr", interpolation="nearest")  # bwr 表示正负值
-    axes[1, i].set_title(f"Noise ε\nStep {step}")
-    axes[1, i].axis('off')
-
-    # 保存数据（可选）
     np.save(os.path.join(output_dir, f"noisy_data_step_{i+1}.npy"), noisy_data)
     np.save(os.path.join(output_dir, f"noise_step_{i+1}.npy"), noise)
-    plt.imsave(os.path.join(output_dir, f"heatmap_rssi_step_{i+1}.png"), noisy_data, cmap="viridis")
-    plt.imsave(os.path.join(output_dir, f"heatmap_noise_step_{i+1}.png"), noise, cmap="bwr")
+
+    # 保存 RSSI 图
+    fig_rssi, ax_rssi = plt.subplots(figsize=(5, 5), dpi=100)
+    ax_rssi.imshow(noisy_data, cmap="viridis", interpolation="nearest")
+    ax_rssi.set_xticks([])
+    ax_rssi.set_yticks([])
+    ax_rssi.spines[:].set_visible(False)
+    plt.tight_layout(pad=0)
+    fig_rssi.savefig(os.path.join(output_dir, f"heatmap_rssi_step_{i+1}.png"), bbox_inches='tight', pad_inches=0)
+    plt.close(fig_rssi)
+
+    # 保存 噪声图
+    fig_noise, ax_noise = plt.subplots(figsize=(5, 5), dpi=100)
+    ax_noise.imshow(noise, cmap="bwr", interpolation="nearest")
+    ax_noise.set_xticks([])
+    ax_noise.set_yticks([])
+    ax_noise.spines[:].set_visible(False)
+    plt.tight_layout(pad=0)
+    fig_noise.savefig(os.path.join(output_dir, f"heatmap_noise_step_{i+1}.png"), bbox_inches='tight', pad_inches=0)
+    plt.close(fig_noise)
+
 
 # 添加 colorbar 到右下角最后一个图
-fig.colorbar(im1, ax=axes[0, :].ravel().tolist(), shrink=0.6, orientation='horizontal', pad=0.05)
-fig.colorbar(im2, ax=axes[1, :].ravel().tolist(), shrink=0.6, orientation='horizontal', pad=0.05)
+# fig.colorbar(im1, ax=axes[0, :].ravel().tolist(), shrink=0.6, orientation='horizontal', pad=0.05)
+# fig.colorbar(im2, ax=axes[1, :].ravel().tolist(), shrink=0.6, orientation='horizontal', pad=0.05)
 
 plt.tight_layout()
 plt.show()
