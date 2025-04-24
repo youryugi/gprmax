@@ -56,7 +56,8 @@ def extract_layout_from_filename(filename):
 
 # 示例文件，可换成你自己的路径
 file1 = r"C:\Users\79152\Desktop\3rdtopic\StableD\GRC2\generateRSSI_2025-02-13_12-51-49\averaged_rssi_per_label\mean_1_1_0_1.npy"
-file2 = r"C:\Users\79152\Desktop\3rdtopic\StableD\GRC2\generateRSSI_2025-02-13_12-51-49\weights_16_experiments\excluded_1_1_0_1\untrained\context_1_1_0_1\samples.npy"
+
+file2 = r"C:\Users\79152\Desktop\3rdtopic\StableD\GRC2\generateRSSI_2025-02-13_12-51-49-redo0422\weights_16_experiments\excluded_0_0_0_0\untrained\context_0_0_0_0\samples.npy"
 
 layout_from_file = extract_layout_from_filename(file1)
 if layout_from_file is None:
