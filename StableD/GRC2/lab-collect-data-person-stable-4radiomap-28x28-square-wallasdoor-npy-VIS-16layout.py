@@ -12,7 +12,7 @@ np.random.seed(42)
 space_size_x = 16.5
 space_size_y = 16.5
 # 每种布局，采集 num_samples 张“图像”
-num_samples = 300
+num_samples = 500
 # 四个路由器坐标 (AP)
 # 1是左下, 2是左上, 3是右下, 4是右上
 routers = [
