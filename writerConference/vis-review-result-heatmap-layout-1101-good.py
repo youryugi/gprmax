@@ -63,7 +63,7 @@ def extract_layout_from_filename(filename):
 
 # 示例文件，可换成你自己的路径
 file1 = r"C:\Users\79152\Desktop\3rdtopic\writerConference\data1111\0213_good_mean_0_0_0_1.npy"
-file2 = r"C:\Users\79152\Desktop\3rdtopic\writerConference\data1111\0213_good_result_0_0_0_1.npy"
+file2 = r"C:\Users\79152\Desktop\3rdtopic\StableD\GRC2\generateRSSI_2025-04-15_16-12-30\weights_16_experiments\excluded_1_1_1_1\untrained\context_1_1_1_1\samples.npy"
 
 layout_from_file = extract_layout_from_filename(file1)
 if layout_from_file is None:
