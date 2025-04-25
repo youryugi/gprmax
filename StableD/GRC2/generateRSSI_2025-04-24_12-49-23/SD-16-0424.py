@@ -334,9 +334,9 @@ if __name__ == "__main__":
             test_samples_t = torch.tensor(test_samples, dtype=torch.float32, device=device)
             save_samples_as_npy(test_samples_t, npy_path)
             #-----可视化然后保存
-            test_samples_t_mean = np.mean(test_samples_t, axis=0, keepdims=True)  # => (1,28,28,4)
+            test_samples_t_mean = torch.mean(test_samples_t, dim=0, keepdim=True)  # => (1,28,28,4)
             channel_index = 0  # 选择第4个路由器通道 (0-based)
-            gt_rssi = test_samples_t_mean[0, :, :, channel_index]  # (28,28)
+            gt_rssi = test_samples_t_mean[0, :, :, channel_index].cpu().numpy()  # ⭐ 加了 .cpu().numpy()
             fig, ax = plt.subplots(figsize=(5, 5))
             ax.imshow(gt_rssi, cmap="viridis", interpolation="nearest")
             ax.set_xticks([])
@@ -349,6 +349,7 @@ if __name__ == "__main__":
             fig.savefig(vis_path, bbox_inches='tight', pad_inches=0)
             plt.close(fig)
             print(f"[Saved visualization to {vis_path}]")
+
 
         print(f"=== Finished multi-run experiment excluding {excluded_combo} ===")
 
