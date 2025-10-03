@@ -1,0 +1,22 @@
+#title: Two side-by-side boxes with safe cylinders
+#domain: 0.400 0.210 0.100
+#dx_dy_dz: 0.002 0.002 0.002
+#time_window: 2e-8
+
+#material: 1 0 1 0 air
+#material: 9 0.005 1 0 soil
+#material: 80 0.01 1 0 water
+#material: 5 0.005 1 0 stone
+#material: 3 0.001 1 0 wood
+
+#waveform: ricker 1 1.5e9 my_ricker
+#hertzian_dipole: z 0.020 0.105 0 my_ricker
+#rx: 0.060 0.105 0
+#src_steps: 0.002 0 0
+#rx_steps: 0.002 0 0
+
+#box: 0.000 0.000 0.000   0.200 0.210 0.100 soil
+#box: 0.200 0.000 0.000   0.400 0.210 0.100 water
+
+#cylinder: 0.120 0.105 0.040   0.120 0.105 0.060   0.008 stone
+#cylinder: 0.300 0.105 0.040   0.300 0.105 0.060   0.008 wood

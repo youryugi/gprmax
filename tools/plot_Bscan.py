@@ -18,6 +18,7 @@
 
 import argparse
 import os
+from datetime import datetime
 
 import h5py
 import numpy as np
@@ -99,3 +100,16 @@ if __name__ == "__main__":
         plthandle = mpl_plot(args.outputfile, outputdata, dt, rx, args.rx_component)
 
     plthandle.show()
+    
+    # Generate filename with current date and time
+    current_time = datetime.now().strftime("%Y%m%d_%H%M%S")
+    base_output_name = os.path.splitext(os.path.basename(args.outputfile))[0]
+    filename = f"bscan_{base_output_name}_{current_time}.png"
+
+    # Save into the same folder as the .out/.in file
+    out_dir = os.path.dirname(os.path.abspath(args.outputfile))
+    savepath = os.path.join(out_dir, filename)
+
+    plt.savefig(savepath, dpi=300)
+    print(f"B-scan saved as: {savepath}")
+
