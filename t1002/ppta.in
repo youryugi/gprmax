@@ -1,0 +1,13 @@
+#title: A-scan from a wood cylinder
+buried in a dielectric half-space
+#domain: 0.4 0.4 0.002
+#dx_dy_dz: 0.002 0.002 0.002
+#time_window: 20e-9
+#material: 60 0 1 0 my_soil0001
+#material: 10 0 1 0 my_soil0002
+#waveform: ricker 1 1.5e9 my_ricker
+#hertzian_dipole: z 0.2 0.3 0 my_ricker
+#rx: 0.25 0.3 0
+#box: 0 0 0 0.4 0.3 0.002 my_soil0001
+#cylinder: 0.2 0.1 0 0.2 0.1 0.002 0.05 my_soil0002
+#geometry_view: 0 0 0 0.4 0.4 0.002 0.002 0.002 0.002 cylinder_half_space n

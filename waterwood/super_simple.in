@@ -1,0 +1,20 @@
+#title: Very simple GPR with big shallow target
+#domain: 2.0 0.4 0.3
+#dx_dy_dz: 0.01 0.01 0.01
+#time_window: 8e-8
+
+#material: 1 0 1 0 air
+#material: 3 0.001 1 0 soil
+#material: 50 0.1 1 0 big_metal
+
+#waveform: ricker 1 2e8 pulse
+
+#box: 0 0 0 2.0 0.4 0.08 air
+#box: 0 0 0.08 2.0 0.4 0.3 soil
+
+#hertzian_dipole: z 0.05 0.2 0.05 pulse
+#rx: 0.05 0.2 0.05
+#src_steps: 0.025 0 0
+#rx_steps: 0.025 0 0
+
+#box: 0.9 0.15 0.12 1.1 0.25 0.16 big_metal

@@ -1,0 +1,21 @@
+
+#title: Soil - 800MHz B-scan of stone sphere
+#domain: 3.0 0.6 0.6
+#dx_dy_dz: 0.005 0.005 0.005
+#time_window: 3.5e-8
+
+#material: 1 0 1 0 air
+#material: 9 0.01 1 0 soil
+#material: 6 0.01 1 0 stone
+
+#waveform: ricker 1 8e8 src
+
+#box: 0 0 0 3.0 0.6 0.15 air
+#box: 0 0 0.15 3.0 0.6 0.60 soil
+
+#hertzian_dipole: z 0.10 0.30 0.10 src
+#rx: 0.12 0.30 0.10
+#src_steps: 0.01 0 0
+#rx_steps:  0.01 0 0
+
+#sphere: 1.50 0.30 0.35 0.03 stone
