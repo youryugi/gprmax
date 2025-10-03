@@ -28,9 +28,9 @@ def get_mute_ns_from_in(infile:str):
 
 def main():
     ap = argparse.ArgumentParser(description="Run gprMax (-n), merge, plot PNG with mute.")
-    ap.add_argument("--infile", required=True, help=".in file (contains #src_steps/#rx_steps)")
-    ap.add_argument("--runs", type=int, required=True, help="N for -n (e.g., 60)")
-    ap.add_argument("--gpu", type=int, help="GPU id")
+    ap.add_argument("--infile", default="t1003/test7.in", help=".in file (contains #src_steps/#rx_steps)")
+    ap.add_argument("--runs", default=60,type=int, help="N for -n (e.g., 60)")
+    ap.add_argument("--gpu", default=0,type=int, help="GPU id")
     ap.add_argument("--comp", default="Ez", help="field component, default Ez")
     ap.add_argument("--mute_ns", type=float, default=None, help="override mute window (ns); if omitted, auto-compute")
     args = ap.parse_args()
