@@ -126,7 +126,7 @@ def main():
     ap.add_argument('--infile', help='.in file path')
     ap.add_argument('--epsilon', type=float, default=None, help='Override epsilon_r (default: inferred or 1.0)')
     ap.add_argument('--fc', type=float, default=None, help='Override center frequency in Hz (default: from waveform)')
-    ap.add_argument('--k', type=float, default=0.8, help='Mute tail length multiplier for (1/fc). Default 0.8')
+    ap.add_argument('--k', type=float, default=1.8, help='Mute tail length multiplier for (1/fc). Default 0.8')
     ap.add_argument('--pulse_factor', type=float, default=1.0, help='Scale of main-lobe ~ pulse_factor/fc (Ricker≈1/fc)')
     ap.add_argument('--dt', type=float, default=None, help='Optional sampling interval (s) to output sample counts')
     args = ap.parse_args()

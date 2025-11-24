@@ -1,0 +1,20 @@
+#title: Random wood blocks in water
+#domain: 5.0 1.0 0.004
+#dx_dy_dz: 0.003 0.003 0.003
+#time_window: 20e-9
+
+#material: 1      0       1 0 air
+#material: 80     0.5     1 0 water
+#material: 3      0.0002  1 0 wood_dry
+
+#waveform: ricker 1 4e8 my_ricker
+#hertzian_dipole: z 0.30 0.10 0 my_ricker
+#rx: 0.34 0.10 0
+#src_steps: 0.01 0 0
+#rx_steps:  0.01 0 0
+
+#box: 0 0.00 0.00  5.0 1.00 0.004 air
+#box: 3.580 0.361 0.000   3.703 0.431 0.004 wood_dry
+#box: 3.505 0.427 0.000   3.636 0.588 0.004 wood_dry
+#box: 3.547 0.384 0.000   3.707 0.563 0.004 wood_dry
+#box: 3.621 0.428 0.000   3.855 0.563 0.004 wood_dry

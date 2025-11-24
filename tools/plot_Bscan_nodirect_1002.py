@@ -12,6 +12,7 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
+
 #
 # You should have received a copy of the GNU General Public License
 # along with gprMax.  If not, see <http://www.gnu.org/licenses/>.
@@ -48,7 +49,7 @@ def mpl_plot(filename, outputdata, dt, rxnumber, rxcomponent):
                      figsize=(20, 10), facecolor='w', edgecolor='w')
     plt.imshow(outputdata, 
                extent=[0, outputdata.shape[1], outputdata.shape[0] * dt, 0], 
-               interpolation='nearest', aspect='auto', cmap='seismic', 
+               interpolation='nearest', aspect='auto', cmap='grey', 
                vmin=-np.amax(np.abs(outputdata)), vmax=np.amax(np.abs(outputdata)))
     plt.xlabel('Trace number')
     plt.ylabel('Time [s]')
@@ -56,7 +57,7 @@ def mpl_plot(filename, outputdata, dt, rxnumber, rxcomponent):
 
     # Grid properties
     ax = fig.gca()
-    ax.grid(which='both', axis='both', linestyle='-.')
+    # ax.grid(which='both', axis='both', linestyle='-.')
 
     cb = plt.colorbar()
     if 'E' in rxcomponent:
