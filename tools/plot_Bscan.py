@@ -48,12 +48,12 @@ def mpl_plot(filename, outputdata, dt, rxnumber, rxcomponent):
                      figsize=(20, 10), facecolor='w', edgecolor='w')
     plt.imshow(outputdata, 
                extent=[0, outputdata.shape[1], outputdata.shape[0] * dt, 0], 
-               interpolation='nearest', aspect='auto', cmap='grey', 
+               interpolation='nearest', aspect='auto', cmap='seismic', 
                vmin=-np.amax(np.abs(outputdata)), vmax=np.amax(np.abs(outputdata)))
     plt.xlabel('Trace number')
     plt.ylabel('Time [s]')
     # plt.title('{}'.format(filename))
-#cmap='seismic', 就是红白蓝三色渐变
+#cmap='seismic', 就是红白蓝三色渐变 grey就是灰色
     # Grid properties
     ax = fig.gca()
     ax.grid(which='both', axis='both', linestyle='-.')

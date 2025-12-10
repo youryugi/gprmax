@@ -1,0 +1,2 @@
+scene_id,infile,n_blocks,blocks_coords,frequency_hz,tx_pos,rx_pos,n_traces,mute_ns,merged_outfile,png_file,timestamp
+scene_0001,scene_0001.in,1,"(1.539,0.714,1.642,0.880)",4e8,"(0.30, 0.10, 0)","(0.34, 0.10, 0)",400,6.0,scene_0001_merged.out,,2025-11-26 22:09:38

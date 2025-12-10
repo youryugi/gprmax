@@ -1,0 +1,17 @@
+#title: Hyperbola Test - Moving Antenna over Fixed Wood
+#domain: 2.5 0.8 1.2
+#dx_dy_dz: 0.004 0.004 0.004
+#time_window: 50e-9
+
+#material: 1      0       1 0 air
+#material: 81     0.5     1 0 water  
+#material: 2      0.001   1 0 dry_wood
+#material: 20     0.05    1 0 riverbed
+
+#waveform: ricker 1 150e6 my_pulse
+#hertzian_dipole: z 2.1000 0.4000 0.7500 my_pulse
+#rx: 2.1000 0.4000 0.7500
+
+#box: 0 0 0  2.5 0.8 0.6000 water
+#box: 0 0 0  2.5 0.8 0.0500 riverbed
+#box: 0.9000 0.3000 0.3000   1.1000 0.5000 0.4000 dry_wood

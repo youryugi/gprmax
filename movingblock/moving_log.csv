@@ -1,0 +1,5 @@
+frame,t_s,x_left,x_right,y_bottom,y_top,v_inst,runs,infile,merged_out,png,timestamp
+0,0.000000,0.500,0.700,0.540,0.660,0.050,1,frame_0000.in,frame_0000.out,,2025-11-24 22:36:56
+0,0.000000,0.500,0.700,0.540,0.660,0.050,40,frame_0000.in,frame_0000_merged.out,frame_0000_merged_Ez.png,2025-11-24 22:39:28
+1,0.200000,0.510,0.710,0.540,0.660,0.054,40,frame_0001.in,frame_0001_merged.out,frame_0001_merged_Ez.png,2025-11-24 22:40:38
+2,0.400000,0.522,0.722,0.540,0.660,0.058,40,frame_0002.in,frame_0002_merged.out,frame_0002_merged_Ez.png,2025-11-24 22:41:49

@@ -11,8 +11,8 @@ BASE_HEADER = """\
 #time_window: 20e-9
 
 #material: 1      0       1 0 air
-#material: 80     0.5     1 0 water
-#material: 3      0.0002  1 0 wood_dry
+#material: 2     0.5     1 0 water
+#material: 30      0.0002  1 0 wood_dry
 
 #waveform: ricker 1 4e8 my_ricker
 #hertzian_dipole: z 0.30 0.10 0 my_ricker
@@ -124,15 +124,16 @@ def wait_any(active):
 
 def main():
     ap = argparse.ArgumentParser(description="Generate random wood blocks scenes and batch run on GPUs.")
-    ap.add_argument("--outdir", default="t1010/sceneswater", help="output directory for .in and results")
-    ap.add_argument("--count", type=int, default=10, help="number of scenes to generate")
+    ap.add_argument("--outdir", default="t1010/sceneswater5", help="output directory for .in and results")
+    ap.add_argument("--count", type=int, default=1, help="number of scenes to generate")
     ap.add_argument("--min-blocks", type=int, default=1, help="min wood blocks per scene")
     ap.add_argument("--max-blocks", type=int, default=5, help="max wood blocks per scene")
     ap.add_argument("--seed", type=int, default=123, help="random seed")
-    ap.add_argument("--runs", type=int, default=200, help="B-scan traces per scene (-n)")
+    ap.add_argument("--runs", type=int, default=400, help="B-scan traces per scene (-n)")
     ap.add_argument("--gpus", default="auto", help="GPU list e.g. 0,1 or 'auto'")
     ap.add_argument("--keep-outs", action="store_true", help="do not delete individual out files after merge")
     ap.add_argument("--plot", action="store_true", help="plot B-scan PNG")
+    ap.set_defaults(plot=True)
     ap.add_argument("--comp", default="Ez", choices=["Ex","Ey","Ez","Hx","Hy","Hz"], help="component for plotting")
     # wood placement ranges (meters)
     ap.add_argument("--x-min", type=float, default=0.5)

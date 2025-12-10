@@ -1,0 +1,15 @@
+#domain: 2.0 1.0 0.002
+#dx_dy_dz: 0.002 0.002 0.002
+#time_window: 12e-9
+#material: 3 0.001 1 0 soil
+#material: 1 1e8 1 0 metal
+#box: 0 0 0 2.0 1.0 0.002 soil
+#cylinder: 0.4 0.7 0 0.4 0.7 0.002 0.05 metal
+#cylinder: 0.8 0.5 0 0.8 0.5 0.002 0.05 metal
+#cylinder: 1.2 0.6 0 1.2 0.6 0.002 0.04 metal
+#cylinder: 1.6 0.4 0 1.6 0.4 0.002 0.06 metal
+#waveform: ricker 1 1.5e9 my_ricker
+#hertzian_dipole: z 0.1 0.9 0 my_ricker
+#rx: 0.14 0.9 0
+#src_steps: 0.02 0 0
+#rx_steps: 0.02 0 0

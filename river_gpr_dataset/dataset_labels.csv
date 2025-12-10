@@ -1,0 +1,2 @@
+sample_id,depth_m,velocity_m_s,bscan_image,positions,times,simulation_time,success
+0,0.1000,0.5000,bscan_sample_0000.png,15,3.7750,2025-11-25T22:12:40,True

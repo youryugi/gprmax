@@ -1,0 +1,3 @@
+t1010/moving_block/frame_0000_merged.out
+t1010/moving_block/frame_0001_merged.out
+t1010/moving_block/frame_0002_merged.out

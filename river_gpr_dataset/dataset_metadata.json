@@ -1,0 +1,24 @@
+{
+  "creation_time": "2025-11-25T22:06:31.722270",
+  "total_samples": 20,
+  "domain_size": [
+    3.0,
+    0.8,
+    1.0
+  ],
+  "water_depth": 0.6,
+  "grid_size": 0.005,
+  "frequency": 800000000.0,
+  "time_window": 2.5e-08,
+  "depth_range": [
+    0.1,
+    0.5
+  ],
+  "velocity_range": [
+    0.5,
+    2.0
+  ],
+  "positions_per_trajectory": 15,
+  "acceleration": 0.1,
+  "component": "Ez"
+}

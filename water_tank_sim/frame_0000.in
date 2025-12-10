@@ -1,0 +1,15 @@
+#title: Moving wood block in water tank (accelerated flow)
+#domain: 1.0 0.3 0.3
+#dx_dy_dz: 0.002 0.002 0.002
+#time_window: 1e-08
+
+#material: 1      0       1 0 air
+#material: 80     0.5     1 0 water
+#material: 3      0.0002  1 0 wood_dry
+
+#waveform: ricker 1 1e+09 my_ricker
+#hertzian_dipole: z 0.5000 0.1500 0.2700 my_ricker
+#rx: 0.5500 0.1500 0.2700
+
+#box: 0 0 0  1.0 0.3 0.2500 water
+#box: 0.2750 0.1100 0.1300   0.3250 0.1900 0.1700 wood_dry
