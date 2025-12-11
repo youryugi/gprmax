@@ -119,7 +119,13 @@ def worker(gpu_id, task_queue):
             # 队列空了，退出
             break
         
-        run_case_task(task, gpu_id)
+        # 增加一层宽泛的 try-except，确保无论发生什么，Worker 都能活着去取下一个任务
+        try:
+            run_case_task(task, gpu_id)
+        except Exception as e:
+            print(f"CRITICAL ERROR in Worker GPU {gpu_id}: {e}")
+            import traceback
+            traceback.print_exc()
     
     print(f"Worker on GPU {gpu_id} finished.")
 
