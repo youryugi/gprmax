@@ -123,7 +123,7 @@ if __name__ == "__main__":
     #     1. 加载数据
     # =====================
     # 请修改为您的图片文件夹路径
-    img_dir = r"./data_images/"  
+    img_dir = r"/home/yang/gprmax/gengpr/cut16gpr50"  
     
     # 图像参数设置
     RSSI_height = 128
