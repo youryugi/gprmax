@@ -3,9 +3,9 @@ import matplotlib.pyplot as plt
 import os
 
 # ========== 1. 加载 28x28 的 RSSI 数据 ==========
-file1 = r"C:\Users\79152\Desktop\3rdtopic\StableD\GRC2\generateRSSI_2025-04-15_16-12-30\X_data.npy"
+file1 = r"C:\Users\79152\Desktop\github\3rdtopic\StableD\GRC2\generateRSSI_2025-04-15_16-12-30\X_data.npy"
 data = np.load(file1)
-data = data[4799][:,:,1]  # 提取你需要的那个通道，得到 (28, 28)
+data = data[399][:,:,0]  # 提取你需要的那个通道，得到 (28, 28) yuan;lai 4799
 
 assert data.shape == (28, 28), f"数据形状错误：{data.shape}"
 

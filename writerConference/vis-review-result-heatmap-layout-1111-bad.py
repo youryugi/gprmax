@@ -126,8 +126,8 @@ y_min, y_max = 1.5, 15
 extent = [x_min, x_max, y_min, y_max]
 
 titles = [
-    f"Ground Truth (Router {channel_index+1})",
-    f"Generated RSSI (Router {channel_index+1})",
+    f"Ground Truth (AP {channel_index+1})",
+    f"Generated RSSI (AP {channel_index+1})",
     "Accuracy Map "
 ]
 cmap_list = ["viridis", "viridis", "gray"]

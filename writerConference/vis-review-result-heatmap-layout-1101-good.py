@@ -63,7 +63,7 @@ def extract_layout_from_filename(filename):
 
 # 示例文件，可换成你自己的路径
 file1 = r"C:\Users\79152\Desktop\3rdtopic\writerConference\data1111\0213_good_mean_0_0_0_1.npy"
-file2 = r"C:\Users\79152\Desktop\3rdtopic\StableD\GRC2\generateRSSI_2025-04-24_12-49-23-redo\weights_16_experiments\excluded_1_0_1_0\untrained\context_1_0_1_0\samples.npy"
+file2 = r"C:\Users\79152\Desktop\3rdtopic\writerConference\data1111\0213_good_result_0_0_0_1.npy"
 
 layout_from_file = extract_layout_from_filename(file1)
 if layout_from_file is None:
@@ -88,7 +88,7 @@ data1 = np.load(file1)  # (1,28,28,4)
 data2 = np.load(file2)  # (1,28,28,4)
 # 对第二个文件做一些预处理，比如多个样本要取平均
 data2 = np.mean(data2, axis=0, keepdims=True)  # => (1,28,28,4)
-
+print("22222222222222222",data2.shape)
 if data1.shape != (1, 28, 28, 4) or data2.shape != (1, 28, 28, 4):
     raise ValueError("数据形状不匹配，需 (1,28,28,4).")
 
@@ -126,8 +126,8 @@ y_min, y_max = 1.5, 15
 extent = [x_min, x_max, y_min, y_max]
 
 titles = [
-    f"Ground Truth (Router {channel_index+1})",
-    f"Generated RSSI (Router {channel_index+1})",
+    f"Ground Truth (AP {channel_index+1})",
+    f"Generated RSSI (AP {channel_index+1})",
     "Accuracy Map "
 ]
 cmap_list = ["viridis", "viridis", "gray"]

@@ -6,8 +6,10 @@ file1 = r"C:\Users\79152\Desktop\3rdtopic\StableD\GRC2\generateRSSI_2025-04-15_1
 
 # 读取数据
 data1 = np.load(file1)  # 形状应为 (16, 16, 1)
+datatemp=data1[4799,:,:,:]
+print(datatemp.shape)
 data1=data1[4799]
-data1=data1[:,:,1]
+data1=data1[:,:,0]
 print(data1.shape)
 
 

@@ -61,7 +61,7 @@ for i, idx in enumerate(selected_indices):
 
     # 画路由器
     for j, (rx, ry) in enumerate(routers):
-        ax.scatter(rx, ry, marker='s', color='red', s=100, label=f"Routers" if j == 0 else None)
+        ax.scatter(rx, ry, marker='s', color='red', s=100, label=f"APs" if j == 0 else None)
 
     # 画墙体
     for wall in walls:
