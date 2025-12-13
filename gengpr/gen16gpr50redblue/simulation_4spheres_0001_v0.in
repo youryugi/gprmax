@@ -1,7 +1,7 @@
 #domain: 2.0 1.0 0.002
 #dx_dy_dz: 0.002 0.002 0.002
 #time_window: 12e-9
-#material: 6.16 0.0030 1 0 soil
+#material: 8.19 0.0089 1 0 soil
 #material: 1 1e8 1 0 metal
 #box: 0 0 0 2.0 1.0 0.002 soil
 #cylinder: 1.600 0.600 0  1.600 0.600 0.002  0.050 metal
