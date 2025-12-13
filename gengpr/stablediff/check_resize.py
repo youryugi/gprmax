@@ -7,7 +7,7 @@ import numpy as np
 
 # ================= 配置区域 =================
 # 1. 图片文件夹路径
-IMG_DIR = r"/home/yang/gprmax/gengpr/cut16gpr50"
+IMG_DIR = r"/home/yang/gprmax/gengpr/cut16bluered50"
 
 # 2. 想要检查的图片文件名 (请确保该文件存在于 IMG_DIR 中)
 TARGET_IMAGE_NAME = "bscan_0101_v0.png"  # 修改为您想看的文件名

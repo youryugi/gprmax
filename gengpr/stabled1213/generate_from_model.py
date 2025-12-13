@@ -4,19 +4,19 @@ import numpy as np
 import matplotlib.pyplot as plt
 from torchvision.utils import make_grid
 import os
-from diffusion_utilities_1212 import *  # 必须导入工具库
-from SD_1212_gpu1 import ContextUnet, denoise_add_noise  # 导入模型定义
+from diffusion_utilities_3d_1212 import *  # 必须导入工具库
+from SD_1212_gpu1_3d import ContextUnet, denoise_add_noise  # 导入模型定义
 
 # ================= 配置区域 =================
 # 1. 模型权重路径 (请修改为您实际训练好的模型路径)
 # 例如: 'weights_16_experiments_img/excluded_1_0_1_0/context_model_99.pth'
-MODEL_PATH = '/home/yang/gprmax/gengpr/stablediff/weights_16_experiments_img_20251212_131355/excluded_1_0_1_0/context_model_99.pth'
+MODEL_PATH = '/home/yang/gprmax/gengpr/stabled1213/weights_16_experiments_img_20251213_110538/excluded_1_0_1_0/context_model_99.pth'
 
 # 2. 想要生成的标签列表
 # 可以写多个，例如 [[1, 0, 1, 0], [0, 0, 0, 0]]
 TARGET_LABELS = [
     [1, 0, 1, 0],  # 生成 1010
-    [1, 1, 1, 1]   # 生成 1111
+    [1, 0, 1, 1]   # 生成 1111
 ]
 
 # 3. 每个标签生成多少张图
@@ -34,10 +34,10 @@ DEVICE_ID = "0"
 # -------------------------------------------
 
 # 扩散模型参数 (必须与训练时一致)
-timesteps = 400
+timesteps = 1000
 beta1 = 1e-4
 beta2 = 0.02
-d_RSSI = 1
+d_RSSI = 3
 RSSI_height = 128
 RSSI_width = 128
 n_feat = 64
