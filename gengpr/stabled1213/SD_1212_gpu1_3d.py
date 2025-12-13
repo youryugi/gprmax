@@ -104,38 +104,25 @@ def denoise_add_noise(x, t, pred_noise, z=None):
 
 @torch.no_grad()
 def sample_ddpm_context(model, n_sample, context, save_rate=20, guide_w=2.0):
-    # guide_w: 引导权重。0 表示无引导，>1 表示强行让图像符合标签。通常设为 2.0
-    
     samples = torch.randn(n_sample, d_RSSI, RSSI_height, RSSI_width).to(device)
     intermediate = []
-    
-    # 构造一个全为 -1 的 context，代表“无条件”
-    # 注意：必须与训练时的 Mask 值保持一致
-    context_uncond = torch.ones_like(context) * -1 
-    
+    context_uncond = torch.ones_like(context) * -1
+
     for i in range(timesteps, 0, -1):
         print(f'sampling timestep {i:3d}', end='\r')
-        t = torch.tensor([i / timesteps])[:, None, None, None].to(device)
+        # 生成与批次匹配的时间步向量，并为两份(有/无条件)复制
+        t_batch = torch.full((n_sample,), i / timesteps, device=device)
+        t_batch = torch.cat([t_batch, t_batch], dim=0).unsqueeze(-1)
+
         z = torch.randn_like(samples) if i > 1 else 0
-        
-        # === CFG 采样核心 ===
-        # 1. 复制输入，一份给有条件，一份给无条件
+
         samples_repeat = samples.repeat(2, 1, 1, 1)
-        t_repeat = t.repeat(2, 1, 1, 1)
-        
-        # 2. 拼接 context：前半部分是真实标签，后半部分是 -1
         c_concat = torch.cat([context, context_uncond], dim=0)
-        
-        # 3. 一次性预测
-        eps_concat = model(samples_repeat, t_repeat, c=c_concat)
-        
-        # 4. 拆分预测结果
+
+        eps_concat = model(samples_repeat, t_batch, c=c_concat)
         eps_cond, eps_uncond = eps_concat.chunk(2, dim=0)
-        
-        # 5. 混合公式：预测值 = 无条件 + w * (有条件 - 无条件)
-        # 这会放大“标签带来的差异”，消除平均化模糊
         eps = eps_uncond + guide_w * (eps_cond - eps_uncond)
-        
+
         samples = denoise_add_noise(samples, i, eps, z)
         if i % save_rate == 0 or i == timesteps or i < 8:
             intermediate.append(samples.detach().cpu().numpy())
@@ -336,7 +323,7 @@ if __name__ == "__main__":
             context_batch = torch.tensor([test_combo] * 10).float().to(device)
             
             # [修改] 传入 multi_model 进行采样
-            test_samples, _ = sample_ddpm_context(multi_model, context_batch.shape[0], context_batch)
+            test_samples, _ = sample_ddpm_context(multi_model, context_batch.shape[0], context_batch, guide_w=4.0)
             
             trained_dir = "trained" if test_combo in train_combos_15 else "untrained"
             combo_dir = os.path.join(exp_dir, trained_dir, f"context_{'_'.join(map(str, test_combo))}")
