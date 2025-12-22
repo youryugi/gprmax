@@ -96,8 +96,7 @@ def reset_unpushed_commits(branch_name):
     return False
 
 def get_changed_files():
-    """获取所有未提交的文件列表 (包括未追踪的)"""
-    # --porcelain 格式通常为: "XY PATH"
+    """获取所有未提交的文件列表 (包括未追踪的)，展开未追踪目录"""
     output = run_command("git status --porcelain")
     if not output:
         return []
@@ -106,14 +105,18 @@ def get_changed_files():
     for line in output.split('\n'):
         if not line:
             continue
-        
-        if len(line) > 3:
-            raw_path = line[3:]
-            if " -> " in raw_path:
-                raw_path = raw_path.split(" -> ")[-1]
-            clean_path = raw_path.strip('"')
-            file_list.append(clean_path)
-            
+        # 第 0-1 位是状态，第 3 位起是路径
+        raw_path = line[3:]
+        if " -> " in raw_path:
+            raw_path = raw_path.split(" -> ")[-1]
+        path = pathlib.Path(raw_path.strip('"'))
+        if path.is_dir():
+            # 展开目录中的所有文件
+            for fp in path.rglob("*"):
+                if fp.is_file():
+                    file_list.append(str(fp))
+        else:
+            file_list.append(str(path))
     return file_list
 
 def commit_and_push(files, batch_num, branch_name, batch_size_mb):
