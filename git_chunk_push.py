@@ -140,6 +140,25 @@ def commit_and_push(files, batch_num, branch_name, batch_size_mb):
     run_command(f"git push {REMOTE_NAME} {branch_name}", stream=True)
     print(f"✅ Batch #{batch_num} done.")
 
+def ensure_gitignore(entries):
+    """将给定路径写入 .gitignore（如不存在则创建），避免重复写入"""
+    gi = pathlib.Path(".gitignore")
+    existing = set()
+    if gi.exists():
+        existing = {line.strip() for line in gi.read_text(encoding="utf-8").splitlines() if line.strip()}
+    new_items = []
+    for e in entries:
+        e = e.replace("\\", "/")
+        if e not in existing:
+            new_items.append(e)
+    if new_items:
+        with gi.open("a", encoding="utf-8") as f:
+            for e in new_items:
+                f.write(e + "\n")
+        print("   📄 Added to .gitignore:")
+        for e in new_items:
+            print(f"      - {e}")
+
 def main():
     print("=== Git Chunk Splitter & Pusher (Auto-Reset Version) ===")
     
@@ -171,9 +190,9 @@ def main():
         
         # 严重警告：超过 GitHub 单文件限制
         if f_size >= GITHUB_FILE_LIMIT_MB:
+            ensure_gitignore([file_path])
             print(f"❌ [SKIP] File '{file_path}' is {f_size:.2f} MB.")
             print(f"   Reason: Exceeds GitHub 100MB limit. Please use Git LFS or remove it.")
-            # 我们不把这个文件加入 batch，直接跳过，这样它就不会被提交
             continue
 
         # 批次限制逻辑
