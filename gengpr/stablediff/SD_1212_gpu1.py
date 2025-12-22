@@ -103,7 +103,7 @@ def denoise_add_noise(x, t, pred_noise, z=None):
     return mean + noise
 
 @torch.no_grad()
-def sample_ddpm_context(n_sample, context, save_rate=20):
+def sample_ddpm_context(model, n_sample, context, save_rate=20): # <--- 修改：增加 model 参数
     # 注意：这里使用全局变量 d_RSSI, RSSI_height, RSSI_width
     samples = torch.randn(n_sample, d_RSSI, RSSI_height, RSSI_width).to(device)
     intermediate = []
@@ -111,7 +111,7 @@ def sample_ddpm_context(n_sample, context, save_rate=20):
         print(f'sampling timestep {i:3d}', end='\r')
         t = torch.tensor([i / timesteps])[:, None, None, None].to(device)
         z = torch.randn_like(samples) if i > 1 else 0
-        eps = nn_model(samples, t, c=context)
+        eps = model(samples, t, c=context) # <--- 修改：使用传入的 model，而不是全局 nn_model
         samples = denoise_add_noise(samples, i, eps, z)
         if i % save_rate == 0 or i == timesteps or i < 8:
             intermediate.append(samples.detach().cpu().numpy())
@@ -186,7 +186,7 @@ if __name__ == "__main__":
     # =====================
     #     2. 设置超参数
     # =====================
-    timesteps = 400
+    timesteps = 800
     beta1 = 1e-4
     beta2 = 0.02
 
@@ -196,7 +196,7 @@ if __name__ == "__main__":
     n_feat = 64 
     n_cfeat = labels.shape[1] # 4
     batch_size = 64 # 图片变大了，Batch Size 可能需要调小一点，防止显存溢出
-    n_epoch = 100
+    n_epoch = 200
     lrate = 1e-4
 
     b_t = (beta2 - beta1) * torch.linspace(0, 1, timesteps + 1, device=device) + beta1
@@ -208,7 +208,8 @@ if __name__ == "__main__":
     optim = torch.optim.Adam(nn_model.parameters(), lr=lrate)
 
     def perturb_input(x, t, noise):
-        return ab_t.sqrt()[t, None, None, None] * x + (1 - ab_t[t, None, None, None]) * noise
+        # <--- 修改：在 (1 - ab_t[...]) 后面加上 .sqrt()
+        return ab_t.sqrt()[t, None, None, None] * x + (1 - ab_t[t, None, None, None]).sqrt() * noise
 
     # === 修改开始：给输出文件夹加上时间戳 ===
     # 获取当前时间，例如 20251212_153000
@@ -296,7 +297,8 @@ if __name__ == "__main__":
 
         for test_combo in all_16_combos:
             context_batch = torch.tensor([test_combo] * 10).float().to(device)
-            test_samples, _ = sample_ddpm_context(context_batch.shape[0], context_batch)
+            # <--- 修改：传入 multi_model
+            test_samples, _ = sample_ddpm_context(multi_model, context_batch.shape[0], context_batch)
             
             trained_dir = "trained" if test_combo in train_combos_15 else "untrained"
             combo_dir = os.path.join(exp_dir, trained_dir, f"context_{'_'.join(map(str, test_combo))}")
