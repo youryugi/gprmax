@@ -20,3 +20,4 @@ dist/
 
 # Jupyter notebook checkpoints
 .ipynb_checkpoints/
+gengpr/genin1jiezhi/nohup.out
