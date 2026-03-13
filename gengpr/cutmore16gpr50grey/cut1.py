@@ -18,9 +18,11 @@ def crop_single_image(image_path, crop_box):
             
             # 1. 获取原文件名 (例如 bscan_0000_v0.png)
             filename = os.path.basename(image_path)
+            name, ext = os.path.splitext(filename)
             
             # 2. 构造保存路径：当前文件夹 + 原文件名
-            save_path = os.path.join('.', filename)
+            save_filename = f"{name}_cropped{ext}"
+            save_path = os.path.join('.', save_filename)
             
             cropped_img.save(save_path)
             
@@ -34,11 +36,11 @@ if __name__ == "__main__":
     # ================= 配置区域 =================
     # 1. 设置源图片路径 (请修改为实际的外部文件夹路径)
     # 例如: '/home/yang/data/bscan_0000_v0.png'
-    IMAGE_PATH = '/home/yang/gprmax/gengpr/gen16gpr50/bscan_0000_v0.png'  
-    
+    IMAGE_PATH = '/home/yang/gprmax/gengpr/cutmore16gpr50grey/bscan_1111_v49.png'  
+
     # 2. 设置裁剪区域 (左, 上, 右, 下)
     # 提示：(0, 0) 是左上角
-    CROP_BOX = (189, 109, 1117, 800)
+    CROP_BOX = (0, 109, 920, 690)
     # ===========================================
 
     crop_single_image(IMAGE_PATH, CROP_BOX)

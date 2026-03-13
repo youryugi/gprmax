@@ -45,10 +45,10 @@ def crop_images_from_folder(source_folder, crop_box):
 if __name__ == "__main__":
     # ================= 配置区域 =================
     # 1. 设置源图片所在的文件夹路径
-    SOURCE_FOLDER = '/home/yang/gprmax/gengpr/gen16gpr50'  
+    SOURCE_FOLDER = '/home/yang/gprmax/gengpr/cutmore16gpr50grey'  
     
     # 2. 设置裁剪区域 (左, 上, 右, 下)
-    CROP_BOX = (189, 109, 1117, 800)
+    CROP_BOX = (0, 109, 920, 690)
     # ===========================================
 
     crop_images_from_folder(SOURCE_FOLDER, CROP_BOX)
